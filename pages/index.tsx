@@ -16,7 +16,9 @@ export default function Home() {
 							price: product.price,
 							countInStock: product.countInStock
 						};
-						return <ProductItem product={pr} key={product.slug} />;
+						return (
+						<ProductItem product={pr} key={product.slug} />
+						)
 					})}
 				</div>
 			</Layout>

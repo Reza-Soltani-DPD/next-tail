@@ -1,8 +1,10 @@
 import { createContext, ReactElement, useReducer } from 'react';
 import type { product } from './data';
 import React from 'react';
+import { type } from 'os';
 
-type statetype ={
+
+export type statetype ={
 	cart:{
 		cartItems:product[]
 	}
@@ -12,37 +14,43 @@ const initialState: statetype = {
 		cartItems: [],
 	},
 };
-i actionType={
-	type:string;
-	payload?:product;
+export type ActionType={
+	type:string,
+	payload:any
 
 }
-export const Store = createContext<statetype>(initialState);
-function reducer<statetype, actionType>(state:statetype,action:actionType) {
+
+
+export const Store = createContext<any>(initialState);
+
+function reducer(state:statetype,action:ActionType) {
 	switch (action.type) {
 		case "CartAddItem": {
 			const newItem = action.payload;
 			const existItem = state.cart.cartItems.find(
 				(item:product) => item.slug === newItem.slug
-			);
-			const cartItems = existItem
+				);
+				const cartItems = existItem
 				? state.cart.cartItems.map((item:product) =>
-						item.slug == existItem.slug ? newItem : item
-				  )
+				item.slug == existItem.slug ? newItem : item
+				)
 				: [...state.cart.cartItems, newItem];
-			return { ...state, cart: { ...state.cart, cartItems } };
+				return { ...state, cart: { ...state.cart, cartItems } };
+			}
+			default:
+				return state;
+			}
 		}
-		default:
-			return state;
-	}
-}
 
 export default function StoreProvider({
-	children,
+	children
 }: {
 	children: ReactElement;
 }) {
-	
+	useReducer
 	const [state, dispatch] = useReducer(reducer, initialState);
-	return <Store.Provider value={{state,dispatch}} > {children} </Store.Provider>;
+	const red={state,dispatch}
+	return (
+		<Store.Provider value={red} > {children} </Store.Provider> 
+	)
 }

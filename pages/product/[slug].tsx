@@ -3,18 +3,21 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 import Layout from '../../components/Layout';
-import data, { product } from '../../utils/data';
+import data from '../../utils/data';
 import { Store } from '../../utils/Store';
 
 
+
 export default function ProductScreen() {
-		const {state,dispatch}=useContext(Store)
+	useContext
+	const {state,dispatch}=useContext(Store)
+	console.log(state)
 	const { query } = useRouter();
 	const { slug } = query;
 	const product = data.products.find((x) => x.slug == slug);
 
 	const addtocarthandler=()=>{
-
+		dispatch({type:"CartAddItem",payload:{...product,quantity:1}})
 	}
 	if (product?.slug) {
 		return (
