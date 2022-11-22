@@ -87,6 +87,7 @@ export interface product{
 	numReviews?: number;
 	countInStock: number;
 	description?: string;
+	quantity?:number
 }
 export interface data {
 	products: product[];

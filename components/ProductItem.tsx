@@ -4,13 +4,12 @@ import type { product } from '../utils/data';
 import Image from 'next/image'
 export default function ProductItem({
 	product,
-	key,
+	
 }: {
 	product: product;
-	key: string;
 }) {
 	return (
-		<div className="card">
+		<div className="card" >
 			<Link href={`/product/${product.slug}`} passHref>
 				<div
 				className="rounded shadow overflow-hidden"

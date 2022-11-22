@@ -1,8 +1,7 @@
 import { createContext, ReactElement, useReducer } from 'react';
 import type { product } from './data';
 import React from 'react';
-import { type } from 'os';
-
+import { parseCookies, setCookie, destroyCookie } from 'nookies'
 
 export type statetype ={
 	cart:{
@@ -10,9 +9,7 @@ export type statetype ={
 	}
 }
 const initialState: statetype = {
-	cart: {
-		cartItems: [],
-	},
+	cart: parseCookies().cart?JSON.parse(parseCookies().cart):{cartItems:[]},
 };
 export type ActionType={
 	type:string,
@@ -21,9 +18,9 @@ export type ActionType={
 }
 
 
-export const Store = createContext<any>(initialState);
 
 function reducer(state:statetype,action:ActionType) {
+	console.log(parseCookies())
 	switch (action.type) {
 		case "CartAddItem": {
 			const newItem = action.payload;
@@ -35,19 +32,25 @@ function reducer(state:statetype,action:ActionType) {
 				item.slug == existItem.slug ? newItem : item
 				)
 				: [...state.cart.cartItems, newItem];
+				setCookie(null,"cart",JSON.stringify({...state.cart,cartItems}),{maxAge:30*24*60*60})
 				return { ...state, cart: { ...state.cart, cartItems } };
+			}
+			case"CartRemoveItem":{
+				const cartItems = state.cart.cartItems.filter((item:product)=>item.slug!== action.payload.slug)
+				setCookie(null,"cart",JSON.stringify({...state.cart,cartItems}),{maxAge:30*24*60*60})
+				return {...state,cart:{...state.cart,cartItems}}
 			}
 			default:
 				return state;
 			}
 		}
-
+export const Store = createContext<any>(initialState);
 export default function StoreProvider({
 	children
 }: {
 	children: ReactElement;
 }) {
-	useReducer
+	
 	const [state, dispatch] = useReducer(reducer, initialState);
 	const red={state,dispatch}
 	return (

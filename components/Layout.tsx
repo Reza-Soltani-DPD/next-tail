@@ -1,13 +1,30 @@
-import React from 'react';
+import React, { useContext, useState,useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
+import { Store } from '../utils/Store';
+import type {product} from "../utils/data"
+
+
+
+
+
 export default function Layout({
 	children,
 	title,
 }: {
-	children: React.ReactElement;
+	children: React.ReactNode;
 	title?: string;
 }) {
+	const [tag,settag]= useState(0)
+	const { state } = useContext(Store);
+	const { cart } = state;
+	useEffect(()=>{
+		let e=0
+		//TODO solve this 
+		//@ts-ignore
+		cart.cartItems.map((item:product)=>{e=e+item?.quantity})
+		settag(e)
+	},[cart])
 	return (
 		<>
 			<Head>
@@ -26,7 +43,18 @@ export default function Layout({
 						</Link>
 						<div className="">
 							<Link href="/cart">
-								<span className="p-3">Cart</span>
+								<span className="p-3">
+									Cart
+									{tag > 0 && (
+										<span className="ml-1 rounded-full bg-red-600 px-2 py-1 text-xs font-bold text-white">
+											{cart.cartItems.reduce(
+												(a: number, c: any) =>
+													a + c.quantity,
+												0
+											)}
+										</span>
+									)}
+								</span>
 							</Link>
 							<Link href="/login">
 								<span className="p-3">Login</span>

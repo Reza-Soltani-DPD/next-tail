@@ -3,21 +3,20 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 import Layout from '../../components/Layout';
-import data from '../../utils/data';
+import data, { product } from '../../utils/data';
 import { Store } from '../../utils/Store';
 
 
 
 export default function ProductScreen() {
-	useContext
 	const {state,dispatch}=useContext(Store)
-	console.log(state)
 	const { query } = useRouter();
 	const { slug } = query;
 	const product = data.products.find((x) => x.slug == slug);
-
 	const addtocarthandler=()=>{
-		dispatch({type:"CartAddItem",payload:{...product,quantity:1}})
+		const existItem = state.cart.cartItems.find((x:product)=>x.slug===product?.slug);
+		const quantity  =existItem ? existItem.quantity + 1:1
+		dispatch({type:"CartAddItem",payload:{...product,quantity}})
 	}
 	if (product?.slug) {
 		return (
@@ -69,7 +68,7 @@ export default function ProductScreen() {
 												: 'Unavailable'}
 										</div>
 									</div>
-									<button className="primary-button w-full" onClick={addtocarthandler}>
+									<button className="primary-button w-full" onClick={()=>addtocarthandler()}>
 										Add to cart
 									</button>
 								</div>

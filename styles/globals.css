@@ -17,11 +17,18 @@
 }
 
 .primary-button{
-  @apply rounded bg-amber-300 py-2 px-4 shadow outline-none hover:bg-amber-400 active:bg-amber-500
+  @apply rounded bg-green-200 py-2 px-4 shadow outline-none hover:bg-green-300 active:bg-green-400
 }
 .td-button-inner{
   @apply rounded-lg p-3 shadow-[3px_3px_10px_4px_rgba(0,0,0,0.2)] hover:shadow-[-5px_-5px_10px_4px_rgba(256,256,256,0)] active:shadow-[inset_3px_3px_10px_4px_rgba(0,0,0,0.2)] transition-shadow duration-150
 }
 .td-button-outer{
   @apply shadow-[-3px_-3px_8px_4px_rgba(256,256,256,0.5)] hover:shadow-[-5px_-5px_8px_4px_rgba(256,256,256,0)] active:shadow-[inset_-3px_-3px_10px_4px_rgba(256,256,256,0.5)] transition-shadow duration-150
+}
+
+input,
+select,
+textarea{
+@apply rounded border p-2 outline-none ring-orange-200/[.55] focus:ring-2 focus:bg-orange-50/[.44] focus:border-none
+
 }

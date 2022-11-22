@@ -4,7 +4,6 @@ import '../styles/globals.css'
 
 export default function App(AppProps: AppProps) {
 	const{Component,pageProps} = AppProps;
-	console.log(AppProps)
 	return (
 		<StoreProvider >
 			<Component {...pageProps} />
