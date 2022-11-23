@@ -6,11 +6,12 @@ import {getCsrfToken, signIn, useSession} from "next-auth/react"
 import {getError} from '../utils/error'
 import{toast} from "react-toastify"
 import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
 type FormValues= {
 	email:string,
 	password:string
 }
-export default function Login({}) {
+export default function Login({csrfToken}:{csrfToken:string}) {
 	//TODO login form type issue
 	// @ts-ignore
 	const {handleSubmit,register,formState:{errors}}=useForm<FormValues>()
@@ -34,6 +35,7 @@ export default function Login({}) {
 	return (
 		<Layout title="Login">
 			<form className="mx-auto max-w-screen-md" onSubmit={handleSubmit(submithandler)}>
+				<input type="hidden" name='csrfToken' defaultValue={csrfToken}  />
 				<h1 className="my-8 text-xl">Login</h1>
 				<div className="mb-4">
 					<label htmlFor='email'>Email:</label>
@@ -58,9 +60,9 @@ export default function Login({}) {
 	);
 }
 
-// export async function getServerSideProps(){
-// 	const csrfToken= await getCsrfToken()
-// 	return{
-// 		props:{csrfToken}
-// 	}
-// }
+export const  getServerSideProps:GetServerSideProps = async (context)=>{
+	const csrfToken= await getCsrfToken()
+	return{
+		props:{csrfToken}
+	}
+}

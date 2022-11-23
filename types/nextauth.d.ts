@@ -5,27 +5,28 @@ declare module 'next-auth' {
 	/**
 	 * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
 	 */
-	interface Session {
+	export interface Session {
 		user: {
-			id: string;
+			id?: string;
 			email: string;
-			password: string;
-			isAdmin: boolean;
+			password?: string;
+			name:string;
 		} & DefaultSession['user'];
 	}
-	// interface User {
-	// 	id?: string;
-	// 	isAdmin?: boolean;
-  //   email:string
-  //   password:string
-	// }
+	export interface User {
+		id?: string;
+			email: string;
+			password?: string;
+			name:string;
+	}
 }
 
 declare module 'next-auth/jwt' {
 	/** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
-	interface JWT {
-		/** OpenID ID Token */
+	export interface JWT {
 		id?: string;
-		isAdmin: boolean;
+			email: string;
+			password?: string;
+			name:string;
 	}
 }

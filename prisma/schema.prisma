@@ -36,14 +36,14 @@ model Session {
 
 model User {
   id            String    @id @default(cuid())
-  firstname     String?
+  email         String   @unique
+  name          String
   lastname      String?
   extename      String?
-  email         String   @unique
   emailVerified DateTime?
   password      String
   image         String?
-  isAdmin       String?
+  userRole       String?
   accounts      Account[]
   sessions      Session[]
 }

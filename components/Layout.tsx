@@ -19,13 +19,11 @@ export default function Layout({
 	const { cart } = state;
 	useEffect(() => {
 		let e = 0;
-		//TODO solve this
-		//@ts-ignore
 		cart.cartItems.map((item: product) => {
-			e = e + item?.quantity;
+			e = item?.quantity ? e + item.quantity:e;
 		});
 		settag(e);
-	}, [cart]);
+	}, [cart]);	
 	return (
 		<>
 			<Head>
@@ -44,7 +42,7 @@ export default function Layout({
 						<Link href="/" passHref>
 							<p className="text-lg p-3 bg">Gozarche</p>
 						</Link>
-						<div className="">
+						<div className="flex flex-row place-items-center">
 							<Link href="/cart">
 								<div className="p-3">
 									Cart
