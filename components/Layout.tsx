@@ -3,10 +3,8 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { Store } from '../utils/Store';
 import type {product} from "../utils/data"
-
-
-
-
+import { ToastContainer } from 'react-toastify';
+import { useSession } from 'next-auth/react';
 
 export default function Layout({
 	children,
@@ -15,16 +13,19 @@ export default function Layout({
 	children: React.ReactNode;
 	title?: string;
 }) {
-	const [tag,settag]= useState(0)
+	const { status, data: session } = useSession();
+	const [tag, settag] = useState(0);
 	const { state } = useContext(Store);
 	const { cart } = state;
-	useEffect(()=>{
-		let e=0
-		//TODO solve this 
+	useEffect(() => {
+		let e = 0;
+		//TODO solve this
 		//@ts-ignore
-		cart.cartItems.map((item:product)=>{e=e+item?.quantity})
-		settag(e)
-	},[cart])
+		cart.cartItems.map((item: product) => {
+			e = e + item?.quantity;
+		});
+		settag(e);
+	}, [cart]);
 	return (
 		<>
 			<Head>
@@ -35,6 +36,8 @@ export default function Layout({
 				/>
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
+			<ToastContainer position="bottom-center" limit={1} />
+
 			<div className="flex min-h-screen flex-col justify-between">
 				<header>
 					<nav className="flex h-12 justify-between items-center ph-4 shadow-[0_-5px_10px_0_rgba(0,0,0,0.3)]">
@@ -43,7 +46,7 @@ export default function Layout({
 						</Link>
 						<div className="">
 							<Link href="/cart">
-								<span className="p-3">
+								<div className="p-3">
 									Cart
 									{tag > 0 && (
 										<span className="ml-1 rounded-full bg-red-600 px-2 py-1 text-xs font-bold text-white">
@@ -54,11 +57,19 @@ export default function Layout({
 											)}
 										</span>
 									)}
+								</div>
+							</Link>
+							<div>
+								<span className="p-3">
+									{status === 'loading' ? (
+										'loading'
+									) : session?.user ? (
+										session.user.name
+									) : (
+										<Link href="/login">Login</Link>
+									)}
 								</span>
-							</Link>
-							<Link href="/login">
-								<span className="p-3">Login</span>
-							</Link>
+							</div>
 						</div>
 					</nav>
 				</header>

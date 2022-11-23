@@ -1,20 +1,35 @@
 import Link from 'next/link';
-import React from 'react';
+import React,{useEffect} from 'react';
 import Layout from '../components/Layout';
 import {SubmitHandler, useForm} from 'react-hook-form'
-import {getCsrfToken} from "next-auth/react"
-
+import {getCsrfToken, signIn, useSession} from "next-auth/react"
+import {getError} from '../utils/error'
+import{toast} from "react-toastify"
+import { useRouter } from 'next/router';
 type FormValues= {
 	email:string,
 	password:string
 }
-export default function login() {
+export default function Login({}) {
 	//TODO login form type issue
 	// @ts-ignore
-	const {handleSubmit,register,watch,formState:{errors}}=useForm<FormValues>()
-
-	const submithandler:SubmitHandler<FormValues>=({email,password}:FormValues )=>{
-		console.log({email,password})
+	const {handleSubmit,register,formState:{errors}}=useForm<FormValues>()
+	const {data:session}= useSession() 
+	const router = useRouter()
+	const {redirect}=router.query
+	useEffect(()=>{
+	  if(session?.user){
+		// @ts-ignore
+		router.push(redirect||'/')
+	  }
+	}, [router,session,redirect])
+	
+	const submithandler:SubmitHandler<FormValues>= async ({email,password}:FormValues )=>{
+		try{
+			const result = await signIn('credentials',{redirect:false,email,password})
+		}catch(err){
+			toast.error(getError(err))
+		}
 	}
 	return (
 		<Layout title="Login">
@@ -43,9 +58,9 @@ export default function login() {
 	);
 }
 
-export async function getServerSideProps(){
-	const csrfToken= await getCsrfToken()
-	return{
-		props:{csrfToken}
-	}
-}
+// export async function getServerSideProps(){
+// 	const csrfToken= await getCsrfToken()
+// 	return{
+// 		props:{csrfToken}
+// 	}
+// }
