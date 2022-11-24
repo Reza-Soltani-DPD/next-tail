@@ -12,7 +12,7 @@ type FormValues= {
 	password:string
 }
 export default function Login({csrfToken}:{csrfToken:string}) {
-	//TODO login form type issue
+	//TODO login form type issue fix-it
 	// @ts-ignore
 	const {handleSubmit,register,formState:{errors}}=useForm<FormValues>()
 	const {data:session}= useSession() 
