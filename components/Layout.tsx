@@ -4,8 +4,11 @@ import Link from 'next/link';
 import { Store } from '../utils/Store';
 import type {product} from "../utils/data"
 import { ToastContainer } from 'react-toastify';
-import { useSession } from 'next-auth/react';
-
+import { signOut, useSession } from 'next-auth/react';
+import { Menu } from '@headlessui/react';
+import DropdownLink from './DropdownLink';
+import { parseCookies, setCookie, destroyCookie } from 'nookies'
+import 'react-toastify/dist/ReactToastify.css';
 export default function Layout({
 	children,
 	title,
@@ -20,10 +23,14 @@ export default function Layout({
 	useEffect(() => {
 		let e = 0;
 		cart.cartItems.map((item: product) => {
-			e = item?.quantity ? e + item.quantity:e;
+			e = item?.quantity ? e + item.quantity : e;
 		});
 		settag(e);
-	}, [cart]);	
+	}, [cart]);
+	const logoutclickhandler =()=>{
+		destroyCookie(null,'cart')
+		signOut({callbackUrl:'/login'})
+	}
 	return (
 		<>
 			<Head>
@@ -62,7 +69,24 @@ export default function Layout({
 									{status === 'loading' ? (
 										'loading'
 									) : session?.user ? (
-										session.user.name
+										<Menu as="div" className="relative inline-block">
+											<Menu.Button >
+												{session.user.name}
+											</Menu.Button>
+											<Menu.Items className="absolute right-0 w-56 p-2 origin-top-right shadow-lg shadow-zinc-300 bg-zinc-50 rounded-lg">
+												<Menu.Item>
+													<DropdownLink href="#" tw_class='dropdown-link' >Profile</DropdownLink>
+												</Menu.Item>
+												<Menu.Item>
+													<DropdownLink href="#" tw_class='dropdown-link'>Order History</DropdownLink>
+												</Menu.Item>
+												<Menu.Item>
+													<div>
+													<a className='dropdown-link' href='#' onClick={logoutclickhandler}>Log out</a>
+													</div>
+												</Menu.Item>
+											</Menu.Items>
+										</Menu>
 									) : (
 										<Link href="/login">Login</Link>
 									)}

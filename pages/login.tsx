@@ -28,9 +28,15 @@ export default function Login({csrfToken}:{csrfToken:string}) {
 	const submithandler:SubmitHandler<FormValues>= async ({email,password}:FormValues )=>{
 		try{
 			const result = await signIn('credentials',{redirect:false,email,password})
+			if(result?.error){
+				toast.error(result.error);
+				
+			}
 		}catch(err){
+			
 			toast.error(getError(err))
 		}
+		toast.success('login successuly')
 	}
 	return (
 		<Layout title="Login">

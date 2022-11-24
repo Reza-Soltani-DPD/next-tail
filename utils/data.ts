@@ -1,4 +1,12 @@
 const data: data = {
+	users:[
+		{
+			email:'reza@gmail.com',
+			name:'reza',
+			password:'123456',
+		}
+
+	],
 	products: [
 		{
 			name: 'Free Shirt',
@@ -77,6 +85,7 @@ const data: data = {
 
 export default data;
 export interface product{
+	id?:string;
 	slug: string;
 	name: string;
 	image: string;
@@ -89,6 +98,17 @@ export interface product{
 	description?: string;
 	quantity?:number
 }
+export interface user{
+	email:         String 
+  name:          String
+  lastname?:      String
+  extename?:     String
+  emailVerified?: string
+  password:      String
+  image?:        String
+  userRole?:       String
+}
 export interface data {
 	products: product[];
+	users:user[]
 }
